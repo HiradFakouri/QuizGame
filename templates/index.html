@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome {% endblock %}</h1>
+
+    <form method="POST">
+        <label for="login">login</label>
+        <button name="login" value="Login">login</button>
+
+        <label for="singup">Sing up</label>
+        <button name="signup" value="Signup">Sign up</button>
+    </form>
+{% endblock %}
