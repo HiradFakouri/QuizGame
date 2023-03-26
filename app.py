@@ -84,9 +84,40 @@ def home():
             if "logout" in request.form:
                 session.pop("username", None)
                 return redirect("/login")
+            
+            if "createNew" in request.form:
+                #return redirect("/createQuiz")
+                return render_template("home.html", username=username)
            
         else:
             return render_template("home.html", username=username)
     else:
         return redirect("/login")
+    
+@app.route("/createQuiz", methods=["GET", "POST"])
+def createQuiz():
+    if "username" in session:
+        username = session["username"]
+        count = 1
+        if request.method == "POST":
+            questions = []
 
+            question = request.form.get("question")
+            answer1 = request.form.get("answer1")
+            answer2 = request.form.get("answer2")
+            answer3 = request.form.get("answer3")
+            answer4 = request.form.get("answer3")
+
+            questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
+
+            print(questions)
+
+            if "add" in request.form:
+                count += 1
+                return render_template("createQuiz.html", count=count)
+            
+            if "submit" in request.form:
+                pass
+
+        else:
+            return render_template("createQuiz.html", count=count)

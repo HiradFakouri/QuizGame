@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Welcome {% endblock %}</h1>
-    <h1>Hello {{ username }}</h1>
-
     <form method="POST">
-        <button name="logout" value="Logout">Log Out</button>
+        <nav class="navbar navbar-light bg-light">
+            <button class="navbar-brand" name="logout" value="Logout">Log Out</button>
+        </nav>
+
+        <h1>{% block title %} Welcome {% endblock %}</h1>
+        <h1>Hello {{ username }}</h1>
+        
+        <div class="container">
+            <button class="js-btn" name="createNew" value="createNew">Create new quiz</button>
+        </div>
+
+        <div class="modal">
+            <div class="modal_content">
+                <span class="close">&times;</span>
+                <p>I'm A Pop Up!!!</p>
+            </div>
+        </div>
     </form>
 
 {% endblock %}
