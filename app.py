@@ -86,11 +86,31 @@ def home():
                 return redirect("/login")
             
             if "createNew" in request.form:
-                #return redirect("/createQuiz")
-                return render_template("home.html", username=username)
+                return redirect("/configQuiz")
            
         else:
             return render_template("home.html", username=username)
+    else:
+        return redirect("/login")
+    
+@app.route("/configQuiz", methods=["GET", "POST"])
+def configQuiz():
+    if "username" in session:
+        username = session["username"]
+        if request.method == "POST":
+            name = request.form.get("name")
+            numOfQue = int(request.form.get("numOfQue"))
+
+            if numOfQue > 50:
+                flash("You cant have more than 50 questions!")
+                return render_template("configQuiz.html")
+
+            session["count"] = numOfQue
+            session["name"] = name
+
+            return redirect("/createQuiz")
+        else:
+            return render_template("configQuiz.html")
     else:
         return redirect("/login")
     
@@ -98,26 +118,25 @@ def home():
 def createQuiz():
     if "username" in session:
         username = session["username"]
-        count = 1
+        count = session["count"]
         if request.method == "POST":
+            
             questions = []
 
-            question = request.form.get("question")
-            answer1 = request.form.get("answer1")
-            answer2 = request.form.get("answer2")
-            answer3 = request.form.get("answer3")
-            answer4 = request.form.get("answer3")
-
-            questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
+            for i in range(count):
+                question = request.form.get(f"question{i}")
+                answer1 = request.form.get(f"answer1{i}")
+                answer2 = request.form.get(f"answer2{i}")
+                answer3 = request.form.get(f"answer3{i}")
+                answer4 = request.form.get(f"answer4{i}")
+                questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
 
             print(questions)
-
-            if "add" in request.form:
-                count += 1
-                return render_template("createQuiz.html", count=count)
             
             if "submit" in request.form:
-                pass
+                return redirect("/home")
 
         else:
             return render_template("createQuiz.html", count=count)
+    else:
+        return redirect("/login")

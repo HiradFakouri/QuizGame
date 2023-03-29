@@ -6,12 +6,12 @@
     <div>
         <form method="post">
             {% for i in range(count)%}
-                <input name="question" type="text" placeholder="Question" required>
+                <input name="question{{ i }}" type="text" placeholder="Question" required>
                 <div>
-                    <input name="answer1" type="text" placeholder="answer1" required>
-                    <input name="answer2" type="text" placeholder="answer2" required>
-                    <input name="answer3" type="text" placeholder="answer3" required>
-                    <input name="answer4" type="text" placeholder="answer4" required>
+                    <input name="answer1{{ i }}" type="text" placeholder="answer1" required>
+                    <input name="answer2{{ i }}" type="text" placeholder="answer2" required>
+                    <input name="answer3{{ i }}" type="text" placeholder="answer3" required>
+                    <input name="answer4{{ i }}" type="text" placeholder="answer4" required>
                 </div>
             {% endfor %}
             <button type="submit" name="submit" value="submit">submit</button>
