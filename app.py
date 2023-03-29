@@ -131,10 +131,11 @@ def createQuiz():
                 answer4 = request.form.get(f"answer4{i}")
                 questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
 
-            print(questions)
             
-            if "submit" in request.form:
-                return redirect("/home")
+            session.pop("count", None)
+            session.pop("name", None)
+            
+            return redirect("/home")
 
         else:
             return render_template("createQuiz.html", count=count)
