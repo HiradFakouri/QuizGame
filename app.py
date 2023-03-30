@@ -78,18 +78,30 @@ def home():
     if "username" in session:
         username = session["username"]
         data = db.execute("SELECT name FROM Questions, Users WHERE username = ?", [username])
-    
+        names_of_quizes = list(data)
+
+        names = []
+        for i in range(len(names_of_quizes[0])):
+            names.append(names_of_quizes[0][i])
+
         if request.method == "POST":
-            
+        
             if "logout" in request.form:
                 session.pop("username", None)
                 return redirect("/login")
             
             if "createNew" in request.form:
                 return redirect("/configQuiz")
-           
+            
+            for j in names:
+                if f"play{i}" in request.form:
+                    pass
+
+                if f"edit{i}" in request.form:
+                    pass
+
         else:
-            return render_template("home.html", username=username)
+            return render_template("home.html", username=username, names=names)
     else:
         return redirect("/login")
     

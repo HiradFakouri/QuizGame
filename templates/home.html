@@ -13,6 +13,14 @@
             <button class="js-btn" name="createNew" value="createNew">Create new quiz</button>
         </div>
 
+        {% for i in names%}
+            <div class="container">
+                <h3>{{ i }}</h3>
+                <button name="play{{ i }}" value="play{{ i }}" type="submit">Play!</button>
+                <button name="edit{{ i }}" value="edit{{ i }}" type="submit">Edit</button>
+            </div>
+        {% endfor %}
+
         
     </form>
 
