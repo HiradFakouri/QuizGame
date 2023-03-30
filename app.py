@@ -5,9 +5,6 @@ conn = sqlite3.connect("QuizGame.db", check_same_thread=False)
 
 db = conn.cursor()
 
-#x = db.execute("SELECT * FROM Users")
-#print(list(x))
-
 app = Flask(__name__)
  
 #config
@@ -40,6 +37,7 @@ def login():
         
         if password == data[0][2]:
             session["username"] = username
+            session["id"] = data[0][0]
             return redirect("/home")
         
         flash("Wrong password")
@@ -96,7 +94,6 @@ def home():
 @app.route("/configQuiz", methods=["GET", "POST"])
 def configQuiz():
     if "username" in session:
-        username = session["username"]
         if request.method == "POST":
             name = request.form.get("name")
             numOfQue = int(request.form.get("numOfQue"))
@@ -117,7 +114,8 @@ def configQuiz():
 @app.route("/createQuiz", methods=["GET", "POST"])
 def createQuiz():
     if "username" in session:
-        username = session["username"]
+        name = session["name"]
+        id = session["id"]
         count = session["count"]
         if request.method == "POST":
             
@@ -131,6 +129,8 @@ def createQuiz():
                 answer4 = request.form.get(f"answer4{i}")
                 questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
 
+            db.execute("INSERT INTO Questions(name, numOfQue, Question, person_id) VALUES (?, ?, ?, ?)", [name, count, str(questions), int(id)])
+            conn.commit()
             
             session.pop("count", None)
             session.pop("name", None)
