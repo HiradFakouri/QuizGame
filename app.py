@@ -77,8 +77,10 @@ def signup():
 def home():
     if "username" in session:
         username = session["username"]
+        data = db.execute("SELECT name FROM Questions, Users WHERE username = ?", [username])
+    
         if request.method == "POST":
-
+            
             if "logout" in request.form:
                 session.pop("username", None)
                 return redirect("/login")
@@ -106,7 +108,7 @@ def configQuiz():
             session["name"] = name
 
             return redirect("/createQuiz")
-        else:
+        else:  
             return render_template("configQuiz.html")
     else:
         return redirect("/login")
