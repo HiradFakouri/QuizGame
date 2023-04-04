@@ -38,7 +38,6 @@ def login():
         if password == data[0][2]:
             session["username"] = username
             session["id"] = data[0][0]
-            session["setMode"] = False
             return redirect("/home")
         
         flash("Wrong password")
@@ -78,6 +77,7 @@ def signup():
 def home():
     if "username" in session:
         username = session["username"]
+        id = session["id"]
         data = db.execute("SELECT name FROM Questions, Users WHERE username = ?", [username])
         names_of_quizes = list(data)
         print(names_of_quizes)
@@ -96,14 +96,13 @@ def home():
             
             for j in names:
                 if f"play{j}" in request.form:
-                    pass
-
-                if f"edit{j}" in request.form:
-                    session["editMode"] = True
-                    return redirect("/configQuiz")
+                    session["selectedQuizName"] = j
+                    return redirect("/selectGamemode")
 
                 if f"delete{j}" in request.form:
-                    pass
+                    db.execute("DELETE FROM Questions WHERE name = ?", [j])
+                    conn.commit()
+                    return redirect("/home")
 
         else:
             return render_template("home.html", username=username, names=names)
@@ -136,7 +135,6 @@ def createQuiz():
         name = session["name"]
         id = session["id"]
         count = session["count"]
-        mode = session["setMode"]
         if request.method == "POST":
             
             questions = []
@@ -149,14 +147,10 @@ def createQuiz():
                 answer4 = request.form.get(f"answer4{i}")
                 questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
 
-            if mode is False:
-                db.execute("INSERT INTO Questions(name, numOfQue, Question, person_id) VALUES (?, ?, ?, ?)", [name, count, str(questions), int(id)])
-                conn.commit()
-            else:#the setMode is not working properly and have to be made beeter
-                db.execute("UPDATE Questions SET name = ?, numOfQue = ?, Question = ? WHERE id = ?", [name, count, str(questions), int(id)])
-                db.commit()
-                session["setMode"] = False
-                
+           
+            db.execute("INSERT INTO Questions(name, numOfQue, Question, person_id) VALUES (?, ?, ?, ?)", [name, count, str(questions), int(id)])
+            conn.commit()
+          
             session.pop("count", None)
             session.pop("name", None)
             
@@ -164,5 +158,17 @@ def createQuiz():
 
         else:
             return render_template("createQuiz.html", count=count)
+    else:
+        return redirect("/login")
+    
+@app.route("/selectGamemode", methods=["GET", "POST"])
+def selectGamemode():
+    if "username" in session:
+        username = session["username"]
+        quizName = session["selectedQuizName"]
+        if request.method == "POST":
+            pass
+        else:
+            return render_template("selectGamemode.html", quizName=quizName)
     else:
         return redirect("/login")
