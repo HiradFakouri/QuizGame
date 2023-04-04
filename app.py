@@ -167,7 +167,9 @@ def selectGamemode():
         username = session["username"]
         quizName = session["selectedQuizName"]
         if request.method == "POST":
-            pass
+            gamemode = request.form.get("gamemode")
+            session["gamemode"] = gamemode
+            return redirect(f"/play/{gamemode}")
         else:
             return render_template("selectGamemode.html", quizName=quizName)
     else:

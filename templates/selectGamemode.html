@@ -4,7 +4,15 @@
    <h1>Quiz: {% block title %} {{ quizName }} {% endblock %}</h1>
 
     <form method="POST">
-        
+        <label for="cars">Choose your gamemode:</label>
+        <select name="gamemode" id="gamemode">
+            <option value="casual">Casual</option>
+            <option value="speedRun">SpeedRun</option>
+            <option value="hardcore">HardCore</option>
+            <option value="master">Master</option>
+        </select>
+        <br><br>
+            <button name="submit" value="submit">submit</button>
     </form>
 
 {% endblock %}
