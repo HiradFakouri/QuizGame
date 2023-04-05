@@ -80,7 +80,6 @@ def home():
         id = session["id"]
         data = db.execute("SELECT name FROM Questions, Users WHERE username = ?", [username])
         names_of_quizes = list(data)
-        print(names_of_quizes)
         names = []
         for i in range(len(names_of_quizes)):
             names.append(names_of_quizes[i][0])
@@ -145,7 +144,7 @@ def createQuiz():
                 answer2 = request.form.get(f"answer2{i}")
                 answer3 = request.form.get(f"answer3{i}")
                 answer4 = request.form.get(f"answer4{i}")
-                questions.append({"question": question, "answer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
+                questions.append({"question": question, "correctAnswer1": answer1, "answer2": answer2, "answer3": answer3, "answer4": answer4})
 
            
             db.execute("INSERT INTO Questions(name, numOfQue, Question, person_id) VALUES (?, ?, ?, ?)", [name, count, str(questions), int(id)])
@@ -174,3 +173,49 @@ def selectGamemode():
             return render_template("selectGamemode.html", quizName=quizName)
     else:
         return redirect("/login")
+
+@app.route("/play/casual")
+def playCasual():
+    if "username" in session:
+        username = session["username"]
+        if request.method == "POST":
+            pass
+        else:
+            return render_template("playCasual.html")
+    else:
+        return redirect("/login")
+
+@app.route("/play/speedRun")
+def playspeedRun():
+    if "username" in session:
+        username = session["username"]
+        if request.method == "POST":
+            pass
+        else:
+            return render_template("playSpeedRun.html")
+    else:
+        return redirect("/login")
+
+@app.route("/play/hardcore")
+def playhardcore():
+    if "username" in session:
+        username = session["username"]
+        if request.method == "POST":
+            pass
+        else:
+            return render_template("playhardcore.html")
+    else:
+        return redirect("/login")
+
+@app.route("/play/master")
+def playmaster():
+    if "username" in session:
+        username = session["username"]
+        if request.method == "POST":
+            pass
+        else:
+            return render_template("playMaster.html")
+    else:
+        return redirect("/login")
+
+
