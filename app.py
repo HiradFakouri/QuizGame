@@ -174,10 +174,31 @@ def selectGamemode():
     else:
         return redirect("/login")
 
+#not working
+def data_to_list(data):
+    datal = list(data)
+    questionstr = datal[0][0]
+
+    string = ""
+    for i in questionstr:
+        if i != "'" or i == "'":
+            string += i
+
+    question = string
+    print(type(question))
+    #return dict(question)
+
+
 @app.route("/play/casual")
 def playCasual():
     if "username" in session:
-        username = session["username"]
+        name = session["selectedQuizName"]
+        data = db.execute("SELECT Question FROM Questions WHERE name = ?", [name])
+
+        question = data_to_list(data)
+
+        #print(question)
+
         if request.method == "POST":
             pass
         else:
